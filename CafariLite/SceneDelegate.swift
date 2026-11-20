@@ -1,30 +1,73 @@
-// Cafari Lite -- the small, open part of Cafari: a web view on the CarPlay
-// screen, and nothing else. The full app, which also casts to Chromecast and
-// AirPlay receivers, and its sideload builds, are at
-// https://github.com/rPlayAI/cafari-public
-//
-// The phone window. Its own browser, independent of the car's, so the two
-// screens never fight over one web view (a WKWebView lives in one window).
-
 import UIKit
 
 final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
-  var window: UIWindow?
 
-  func scene(
-    _ scene: UIScene,
-    willConnectTo session: UISceneSession,
-    options connectionOptions: UIScene.ConnectionOptions
-  ) {
-    Log.write("phone scene willConnect role=\(session.role.rawValue)")
-    guard let windowScene = scene as? UIWindowScene else {
-      Log.write("phone scene is NOT a UIWindowScene: \(type(of: scene))")
-      return
+    var window: UIWindow?
+
+    func scene(
+        _ scene: UIScene,
+        willConnectTo session: UISceneSession,
+        options connectionOptions: UIScene.ConnectionOptions
+    ) {
+
+        Log.write(
+            "Phone scene willConnect role=\(session.role.rawValue)"
+        )
+
+        guard let windowScene = scene as? UIWindowScene else {
+
+            Log.write("Invalid UIWindowScene")
+            return
+        }
+
+        let window = UIWindow(windowScene: windowScene)
+
+        window.rootViewController = BrowserViewController(
+            showsStatus: true
+        )
+
+        window.makeKeyAndVisible()
+
+        self.window = window
+
+        Log.write(
+            "Phone window initialized: \(window.bounds.size)"
+        )
+
+        Log.displayInfo(
+            windowScene,
+            name: "iPhone Display"
+        )
     }
-    let window = UIWindow(windowScene: windowScene)
-    window.rootViewController = BrowserViewController(showsStatus: true)
-    window.makeKeyAndVisible()
-    self.window = window
-    Log.write("phone window up \(window.bounds.size) key=\(window.isKeyWindow)")
-  }
+
+    func sceneDidBecomeActive(_ scene: UIScene) {
+
+        guard let windowScene = scene as? UIWindowScene else {
+            return
+        }
+
+        Log.write("Phone scene became active")
+
+        Log.displayInfo(
+            windowScene,
+            name: "iPhone Display Active"
+        )
+    }
+
+    func windowScene(
+        _ windowScene: UIWindowScene,
+        didUpdate previousCoordinateSpace: UICoordinateSpace,
+        interfaceOrientation previousInterfaceOrientation: UIInterfaceOrientation,
+        traitCollection previousTraitCollection: UITraitCollection
+    ) {
+
+        Log.write("Display configuration changed")
+
+        Log.displayInfo(
+            windowScene,
+            name: "iPhone Display Updated"
+        )
+
+        window?.rootViewController?.view.setNeedsLayout()
+    }
 }
