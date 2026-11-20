@@ -1,23 +1,16 @@
-// DuoCafari Settings
-// Based on Cafari Lite
-// Original project: https://github.com/rPlayAI/cafari-lite
-
 import Foundation
-import UIKit
 
 enum Settings {
 
     private static let defaults = UserDefaults.standard
 
-    // MARK: - CarPlay Settings
+    // MARK: - Existing CarPlay Settings
 
-    /// 차량 화면의 네이티브 해상도 사용
     static var carNativeResolution: Bool {
         get {
             if defaults.object(forKey: "carNativeResolution") == nil {
                 return true
             }
-
             return defaults.bool(forKey: "carNativeResolution")
         }
         set {
@@ -25,23 +18,20 @@ enum Settings {
         }
     }
 
-    /// 차량 화면 디버그 테두리
     static var debugBorder: Bool {
         get {
-            defaults.bool(forKey: "debugBorder")
+            return defaults.bool(forKey: "debugBorder")
         }
         set {
             defaults.set(newValue, forKey: "debugBorder")
         }
     }
 
-    /// 차량 사이드바 영역 회피
     static var avoidSidebar: Bool {
         get {
             if defaults.object(forKey: "avoidSidebar") == nil {
                 return true
             }
-
             return defaults.bool(forKey: "avoidSidebar")
         }
         set {
@@ -49,13 +39,11 @@ enum Settings {
         }
     }
 
-    /// 정차 상태에서만 재생
     static var playOnlyWhenParked: Bool {
         get {
             if defaults.object(forKey: "playOnlyWhenParked") == nil {
                 return true
             }
-
             return defaults.bool(forKey: "playOnlyWhenParked")
         }
         set {
@@ -63,15 +51,14 @@ enum Settings {
         }
     }
 
-    // MARK: - Duo Display Settings
+    // MARK: - Duo Adaptive Layout
 
-    /// 화면 크기에 따른 자동 UI 조정
+    /// 화면 크기에 따라 인터페이스를 자동 조정합니다.
     static var adaptiveLayout: Bool {
         get {
             if defaults.object(forKey: "adaptiveLayout") == nil {
                 return true
             }
-
             return defaults.bool(forKey: "adaptiveLayout")
         }
         set {
@@ -79,13 +66,12 @@ enum Settings {
         }
     }
 
-    /// 브라우저 툴바 표시
+    /// 툴바 표시 여부
     static var showToolbar: Bool {
         get {
             if defaults.object(forKey: "showToolbar") == nil {
                 return true
             }
-
             return defaults.bool(forKey: "showToolbar")
         }
         set {
@@ -93,13 +79,12 @@ enum Settings {
         }
     }
 
-    /// 화면 여백
+    /// 화면 가장자리 여백
     static var displayMargin: Double {
         get {
             if defaults.object(forKey: "displayMargin") == nil {
-                return 8
+                return 8.0
             }
-
             return defaults.double(forKey: "displayMargin")
         }
         set {
@@ -107,13 +92,12 @@ enum Settings {
         }
     }
 
-    /// 브라우저 툴바 크기
+    /// 툴바 크기 배율
     static var toolbarScale: Double {
         get {
             if defaults.object(forKey: "toolbarScale") == nil {
                 return 1.0
             }
-
             return defaults.double(forKey: "toolbarScale")
         }
         set {
@@ -121,13 +105,12 @@ enum Settings {
         }
     }
 
-    /// 화면 정보 로그 기록
+    /// 화면 진단 정보 기록
     static var displayDiagnostics: Bool {
         get {
             if defaults.object(forKey: "displayDiagnostics") == nil {
                 return true
             }
-
             return defaults.bool(forKey: "displayDiagnostics")
         }
         set {
@@ -138,7 +121,6 @@ enum Settings {
     // MARK: - Reset
 
     static func resetDuoSettings() {
-
         defaults.removeObject(forKey: "adaptiveLayout")
         defaults.removeObject(forKey: "showToolbar")
         defaults.removeObject(forKey: "displayMargin")
@@ -150,8 +132,6 @@ enum Settings {
 // MARK: - Notifications
 
 extension Notification.Name {
-
     static let cafariLiteSettingsChanged =
         Notification.Name("CafariLiteSettingsChanged")
-
 }
