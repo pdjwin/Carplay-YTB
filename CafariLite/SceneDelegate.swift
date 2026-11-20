@@ -4,6 +4,8 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
     var window: UIWindow?
 
+    // MARK: - Connect
+
     func scene(
         _ scene: UIScene,
         willConnectTo session: UISceneSession,
@@ -20,7 +22,9 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
             return
         }
 
-        let window = UIWindow(windowScene: windowScene)
+        let window = UIWindow(
+            windowScene: windowScene
+        )
 
         window.rootViewController = BrowserViewController(
             showsStatus: true
@@ -36,9 +40,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         Log.displayInfo(
             windowScene,
-            name: "iPhone Display"
+            name: "DuoCafari Phone Display"
         )
     }
+
+    // MARK: - Active
 
     func sceneDidBecomeActive(_ scene: UIScene) {
 
@@ -50,9 +56,18 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
         Log.displayInfo(
             windowScene,
-            name: "iPhone Display Active"
+            name: "DuoCafari Active Display"
         )
     }
+
+    // MARK: - Background
+
+    func sceneDidEnterBackground(_ scene: UIScene) {
+
+        Log.write("Phone scene entered background")
+    }
+
+    // MARK: - Display Update
 
     func windowScene(
         _ windowScene: UIWindowScene,
@@ -61,11 +76,11 @@ final class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         traitCollection previousTraitCollection: UITraitCollection
     ) {
 
-        Log.write("Display configuration changed")
+        Log.write("Phone display configuration changed")
 
         Log.displayInfo(
             windowScene,
-            name: "iPhone Display Updated"
+            name: "DuoCafari Updated Display"
         )
 
         window?.rootViewController?.view.setNeedsLayout()
