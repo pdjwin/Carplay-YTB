@@ -76,7 +76,10 @@ final class BrowserViewController: UIViewController, WKNavigationDelegate {
 
         toolbar = bar
 
+        bar.isHidden = showsStatus && !Settings.showToolbar
+
         bar.translatesAutoresizingMaskIntoConstraints = false
+        
         view.addSubview(bar)
 
         if showsStatus {
