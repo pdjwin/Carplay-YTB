@@ -6,7 +6,7 @@
 
 // A bundle id nobody else will be using. Yours must be unique on the App
 // Store's namespace, so change it.
-CAFARI_LITE_BUNDLE_ID = com.example.cafarilite
+CAFARI_LITE_BUNDLE_ID = com.duocafari.app
 
 // Your ten-character Apple Developer team, e.g. ABCDE12345. Empty means Xcode
 // falls back to whatever it can find, which is fine for a phone-only build.
