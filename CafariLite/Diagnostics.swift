@@ -4,16 +4,14 @@ import UIKit
 enum Log {
 
     private static let url: URL? = {
-        let dir = FileManager.default.urls(
+        FileManager.default.urls(
             for: .documentDirectory,
             in: .userDomainMask
-        ).first
-
-        return dir?.appendingPathComponent("lite.log")
+        ).first?.appendingPathComponent("lite.log")
     }()
 
     private static let queue = DispatchQueue(
-        label: "duocafari.log"
+        label: "duocafari.diagnostics"
     )
 
     private static var started = false
@@ -34,10 +32,15 @@ enum Log {
                 )
             }
 
-            let line =
-                "\(Date().formatted(date: .omitted, time: .standard)) \(message)\n"
+            let timestamp = ISO8601DateFormatter().string(
+                from: Date()
+            )
 
-            if let handle = try? FileHandle(forWritingTo: url) {
+            let line = "\(timestamp) \(message)\n"
+
+            if let handle = try? FileHandle(
+                forWritingTo: url
+            ) {
 
                 handle.seekToEndOfFile()
                 handle.write(Data(line.utf8))
@@ -54,48 +57,69 @@ enum Log {
         }
     }
 
+    // MARK: - Display Information
+
     static func displayInfo(
         _ windowScene: UIWindowScene,
         name: String
     ) {
 
+        guard Settings.displayDiagnostics else {
+            return
+        }
+
         let screen = windowScene.screen
 
-        let pointSize = screen.bounds.size
-        let pixelSize = screen.nativeBounds.size
-        let scale = screen.scale
+        let points = screen.bounds.size
+        let pixels = screen.nativeBounds.size
 
-        let safeArea = windowScene.windows.first?.safeAreaInsets ?? .zero
+        let scale = screen.scale
+        let nativeScale = screen.nativeScale
+
+        let safeArea =
+            windowScene.windows.first?.safeAreaInsets ?? .zero
 
         let orientation =
             windowScene.interfaceOrientation
 
         let info = """
 
-        ===== DUO DISPLAY INFORMATION =====
+        ========================================
+        DUOCAFARI DISPLAY DIAGNOSTICS
+
         Name: \(name)
-        Scene: \(windowScene.session.role.rawValue)
 
-        Point Width: \(pointSize.width)
-        Point Height: \(pointSize.height)
+        Scene Role:
+        \(windowScene.session.role.rawValue)
 
-        Pixel Width: \(pixelSize.width)
-        Pixel Height: \(pixelSize.height)
+        Point Size:
+        \(points.width) x \(points.height)
 
-        Scale: \(scale)
+        Native Pixel Size:
+        \(pixels.width) x \(pixels.height)
 
-        Safe Area Top: \(safeArea.top)
-        Safe Area Bottom: \(safeArea.bottom)
-        Safe Area Left: \(safeArea.left)
-        Safe Area Right: \(safeArea.right)
+        Screen Scale:
+        \(scale)
 
-        Orientation: \(orientation.rawValue)
+        Native Scale:
+        \(nativeScale)
 
-        User Interface Style: \(windowScene.traitCollection.userInterfaceStyle.rawValue)
+        Safe Area:
+        Top: \(safeArea.top)
+        Bottom: \(safeArea.bottom)
+        Left: \(safeArea.left)
+        Right: \(safeArea.right)
 
-        Display Gamut: \(screen.traitCollection.displayGamut.rawValue)
+        Orientation:
+        \(orientation.rawValue)
 
-        ===================================
+        User Interface Style:
+        \(windowScene.traitCollection.userInterfaceStyle.rawValue)
+
+        Display Gamut:
+        \(screen.traitCollection.displayGamut.rawValue)
+
+        ========================================
         """
 
         write(info)
